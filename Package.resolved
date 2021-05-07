@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "Raylib",
+        "repositoryURL": "https://github.com/conifer-dev/raylib-swift",
+        "state": {
+          "branch": "master",
+          "revision": "20ccb161d0ce6ec8f5b442f70e2d41ad924af580",
+          "version": null
+        }
+      }
+    ]
+  },
+  "version": 1
+}
