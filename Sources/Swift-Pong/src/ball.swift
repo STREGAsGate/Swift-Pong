@@ -20,4 +20,16 @@ struct Ball {
     mutating func Draw() {
         DrawRectangleRec(position, ballColor)
     }
+
+    func hasCollided(with paddle: Paddle) -> Bool {
+        if self.position.x > paddle.position.x + paddle.paddleWidth + 5 || paddle.position.x > self.position.x + self.ballWidth + 5{
+            return false
+        }
+
+        if self.position.y > paddle.position.y + paddle.paddleHeight + 5 || paddle.position.y > self.position.y + self.ballHeight + 5{
+            return false
+        }
+
+        return true
+    }
 }
