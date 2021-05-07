@@ -3,8 +3,10 @@ import CRaylib
 import Raylib
 
 struct SoundManager {
-    static var backgroundMusic = LoadMusicStream("Sources/Resources/bgm.wav")
-    static var paddleHit = LoadSound("Sources/Resources/paddleHit.wav")
+    private static var backgroundMusicPath = URL(string: "src/sound/bgm.wav")!
+    private static var paddleHitPath = URL(string: "src/sound/paddleHit.wav")!
+    static var backgroundMusic = LoadMusicStream(backgroundMusicPath.path)
+    static var paddleHit = LoadSound(paddleHitPath.path)
 
     static func UpdateMusic() {
         UpdateMusicStream(self.backgroundMusic)

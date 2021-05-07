@@ -17,8 +17,8 @@ let package = Package(
         .target(
         name: "Resources",
         resources: [
-            .process("bgm.wav"),
-            .process("paddleHit.wav")
+            .copy("bgm.wav"),
+            .copy("paddleHit.wav"),
             ]
     ),
     ]
