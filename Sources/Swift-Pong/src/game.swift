@@ -89,7 +89,7 @@ struct Game {
 
             if ball.hasCollided(with: player) || ball.hasCollided(with: AI) {
                 ball.velocity.x *= -1.05
-                print(ball.velocity.x)
+                PlaySound(SoundManager.paddleHit)
             }
 
             if ball.position.x < 50 && AI.position.x == 0 || ball.position.x > 90 && AI.position.x > 40 {
