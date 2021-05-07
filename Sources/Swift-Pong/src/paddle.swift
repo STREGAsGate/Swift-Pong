@@ -3,21 +3,21 @@ import CRaylib
 import Raylib
 
 struct Paddle {
-    var Position: Rectangle
-    var Speed: Float32
-    var PaddleWidth: Float32
-    var PaddleHeight: Float32
-    var PaddleColor: Color
+    var position: Rectangle
+    var velocity: Vector2
+    var paddleWidth: Float32
+    var paddleHeight: Float32
+    var paddleColor: Color
 
-    init(Position: Rectangle, Speed: Float32, PaddleWidth: Float32, PaddleHeight: Float32, PaddleColor: Color) {
-        self.Position = Position
-        self.Speed = Speed
-        self.PaddleWidth = PaddleWidth
-        self.PaddleHeight = PaddleHeight
-        self.PaddleColor = PaddleColor
+    init(position: Rectangle, velocity: Vector2, paddleWidth: Float32, paddleHeight: Float32, paddleColor: Color) {
+        self.position = position
+        self.velocity = velocity
+        self.paddleWidth = paddleWidth
+        self.paddleHeight = paddleHeight
+        self.paddleColor = paddleColor
     }
 
     mutating func Draw() {
-        DrawRectangleRec(Position, PaddleColor)
+        DrawRectangleRec(position, paddleColor)
     }
 }

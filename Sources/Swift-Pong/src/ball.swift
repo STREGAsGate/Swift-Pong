@@ -3,21 +3,21 @@ import CRaylib
 import Raylib
 
 struct Ball {
-    var Position: Rectangle
-    var Velocity: Vector2
-    var BallWidth: Float32
-    var BallHeight: Float32
-    var BallColor: Color
+    var position: Rectangle
+    var velocity: Vector2
+    var ballWidth: Float32
+    var ballHeight: Float32
+    var ballColor: Color
 
-    init(Position: Rectangle, Velocity: Vector2, BallWidth: Float32, BallHeight: Float32, BallColor: Color) {
-        self.Position = Position
-        self.Velocity = Velocity
-        self.BallWidth = BallWidth
-        self.BallHeight = BallHeight
-        self.BallColor = BallColor
+    init(position: Rectangle, velocity: Vector2, ballWidth: Float32, ballHeight: Float32, ballColor: Color) {
+        self.position = position
+        self.velocity = velocity
+        self.ballWidth = ballWidth
+        self.ballHeight = ballHeight
+        self.ballColor = ballColor
     }
 
     mutating func Draw() {
-        DrawRectangleRec(Position, BallColor)
+        DrawRectangleRec(position, ballColor)
     }
 }

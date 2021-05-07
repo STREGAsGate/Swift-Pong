@@ -18,41 +18,81 @@ struct GameConfig {
 /// Game struct holding all game related methods that are responsible for running the game.
 struct Game {
 
-    let deltaTime = GetFrameTime()
+    enum GameState {
+        case IDLE
+        case START
+        case GAME_OVER
+    }
+
+    static var gameState = GameState.IDLE
 
     /// Draw method that takes all game-related drawing responsibilities.
     static func Draw() {
         BeginDrawing()
-        ClearBackground(BLACK)
-        Player.Draw()
+        ClearBackground(OLIVEDAB)
+        DrawFPS(10,10)
+        player.Draw()
         AI.Draw()
         ball.Draw()
         EndDrawing()
     }
 
+    /// Function taking over the responsibility of updating the game loop
     static func Update(dt: Float) {
-        if IsKeyDown(Int32(KEY_W.rawValue)) {
-            Player.Position.y -= Player.Speed * dt
-        }
+        switch gameState {
+        case .IDLE:
+            DrawText("PRESS SPACE TO SERVE", 500, 200, 24, WHITE)
+            if IsKeyPressed(Int32(KEY_SPACE.rawValue)) {
+                gameState = GameState.START
+            }
+        case .START:
+            if IsKeyDown(Int32(KEY_W.rawValue)) {
+                player.position.y -= player.velocity.y * dt
+            }
+            if IsKeyDown(Int32(KEY_S.rawValue)) {
+                player.position.y += player.velocity.y * dt
+            }
 
-        if IsKeyDown(Int32(KEY_S.rawValue)) {
-            Player.Position.y += Player.Speed * dt
-        }
+            if player.position.y < 0 {
+                player.position.y = 0
+            } else if player.position.y > (Float(GameConfig.WINDOW_HEIGHT) - player.paddleHeight) {
+                player.position.y = Float(GameConfig.WINDOW_HEIGHT) - player.paddleHeight
+            }
 
-        if Player.Position.y <= 0 {
-            Player.Position.y = 0
-        } else if Player.Position.y >= (Float(GameConfig.WINDOW_HEIGHT) - Player.PaddleHeight) {
-            Player.Position.y = Float(GameConfig.WINDOW_HEIGHT) - Player.PaddleHeight
-        }
+            if AI.position.y < 0 {
+                AI.position.y = 0
+            } else if AI.position.y > (Float(GameConfig.WINDOW_HEIGHT) - AI.paddleHeight) {
+                AI.position.y = Float(GameConfig.WINDOW_HEIGHT) - AI.paddleHeight
+            }
 
-        if AI.Position.y <= 0 {
-            AI.Position.y = 0
-        } else if AI.Position.y >= (Float(GameConfig.WINDOW_HEIGHT) - AI.PaddleHeight) {
-            AI.Position.y = Float(GameConfig.WINDOW_HEIGHT) - Player.PaddleHeight
+            ball.position.x -= ball.velocity.x * dt
+            ball.position.y -= ball.velocity.y * dt
+
+            if ball.position.y <= 1 || ball.position.y >= Float(GameConfig.WINDOW_HEIGHT) + 1 {
+                ball.velocity.y *= -1
+            }
+            if CheckCollisionRecs(ball.position, AI.position) || CheckCollisionRecs(ball.position, player.position){
+                ball.velocity.x *= -1
+            }
+            if ball.velocity.x > 0 || ball.velocity.y > 0 && ball.position.x > ball.velocity.x + 100 {
+                if ball.position.y + (ball.ballHeight / 2) > AI.position.y + AI.paddleHeight + 100 {
+                    AI.velocity.y = 400 * dt
+                    AI.position.y += AI.velocity.y
+                } else if ball.position.y + (ball.ballHeight / 2) <= AI.position.y+100{
+                    AI.velocity.y = -400 * dt
+                    AI.position.y += AI.velocity.y
+                } else if ball.position.y + (ball.ballHeight / 2) > AI.position.y && ball.position.y + (ball.ballHeight / 2) <= AI.position.y + AI.paddleHeight {
+                    AI.velocity.y = 0
+                }
+            } else {
+                AI.velocity.y = 0
+            }
+        case .GAME_OVER:
+            print("Game Over")
         }
     }
 }
 
-var Player = Paddle(Position: Rectangle(x: 10, y: 320, width: 10, height: 100), Speed: 400, PaddleWidth: 10, PaddleHeight: 100, PaddleColor: WHITE)
-var AI = Paddle(Position: Rectangle(x:1260, y: 320, width: 10, height: 100), Speed: 400, PaddleWidth: 10, PaddleHeight: 100, PaddleColor: WHITE)
-var ball = Ball(Position: Rectangle(x:Float(GameConfig.WINDOW_WIDTH/2), y:Float(GameConfig.WINDOW_HEIGHT/2), width: 10, height: 10), Velocity: Vector2(x: 400, y:400), BallWidth: 10, BallHeight: 10, BallColor: WHITE)
+var player = Paddle(position: Rectangle(x: 10, y: 320, width: 10, height: 100), velocity: Vector2(x: 400, y: 400), paddleWidth: 10, paddleHeight: 100, paddleColor: WHITE)
+var AI = Paddle(position: Rectangle(x:1260, y: 320, width: 10, height: 100), velocity: Vector2(x: 0, y: 0), paddleWidth: 10, paddleHeight: 100, paddleColor: WHITE)
+var ball = Ball(position: Rectangle(x:Float(GameConfig.WINDOW_WIDTH/2), y:Float(GameConfig.WINDOW_HEIGHT/2), width: 10, height: 10), velocity: Vector2(x: 400, y:400), ballWidth: 10, ballHeight: 10, ballColor: WHITE)
