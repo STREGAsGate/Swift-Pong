@@ -14,11 +14,12 @@ let package = Package(
     ],
     targets: [
         .target(name: "Swift-Pong", dependencies: ["Raylib"]),
-        .target(
+        .target(    
         name: "Resources",
         resources: [
-            .copy("bgm.wav"),
-            .copy("paddleHit.wav"),
+            .process("bgm.wav"),
+            .process("paddleHit.wav"),
+
             ]
     ),
     ]
