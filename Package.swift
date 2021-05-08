@@ -13,14 +13,13 @@ let package = Package(
         .package(name: "Raylib", url: "https://github.com/conifer-dev/raylib-swift", .branch("master"))
     ],
     targets: [
-        .target(name: "Swift-Pong", dependencies: ["Raylib"]),
-        .target(    
-        name: "Resources",
-        resources: [
-            .process("bgm.wav"),
-            .process("paddleHit.wav"),
-
+        .target(
+            name: "Swift-Pong", 
+            dependencies: ["Raylib"],
+            resources: [.copy("./src/Assets")],
+            swiftSettings: [
+            .define("SPM")
             ]
-    ),
+            ),
     ]
 )
