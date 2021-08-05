@@ -3,9 +3,6 @@ import PackageDescription
 
 let package = Package(
     name: "Swift-Pong",
-    platforms: [
-        .macOS(.v11)
-    ],
     products: [
         .executable(name: "Swift-Pong", targets: ["Swift-Pong"])
     ],
@@ -16,10 +13,7 @@ let package = Package(
         .target(
             name: "Swift-Pong", 
             dependencies: ["Raylib"],
-            resources: [.copy("./src/Assets")],
-            swiftSettings: [
-            .define("SPM")
-            ]
-            ),
+            resources: [.copy("./src/Assets")]
+            )
     ]
 )

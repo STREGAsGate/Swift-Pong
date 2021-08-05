@@ -13,11 +13,11 @@ struct GameConfig {
     static let WINDOW_WIDTH: Int32 = 1280
     static let WINDOW_HEIGHT: Int32 = 720
     static let WINDOW_TITLE: String = "Swift-Pong"
-    static let deltaTime = GetFrameTime()
+    static let TARGET_FPS: Int32 = 60
 
     /// Holds all Raylib related config flags.
     static func ConfigFlags() {
-        SetConfigFlags(FLAG_VSYNC_HINT.rawValue)
+        SetTargetFPS(TARGET_FPS)
     }
 }
 
@@ -110,6 +110,3 @@ struct Game {
     }
 }
 
-var player = Paddle(position: Rectangle(x: 10, y: 320, width: 10, height: 100), velocity: Vector2(x: 0, y: 550), paddleWidth: 10, paddleHeight: 100, paddleColor: WHITE)
-var AI = Paddle(position: Rectangle(x:1260, y: 320, width: 10, height: 100), velocity: Vector2(x: 420, y: 420), paddleWidth: 10, paddleHeight: 100, paddleColor: WHITE)
-var ball = Ball(position: Rectangle(x:Float(GameConfig.WINDOW_WIDTH/2), y:Float(GameConfig.WINDOW_HEIGHT/2), width: 10, height: 10), velocity: Vector2(x: 420, y:420), ballWidth: 10, ballHeight: 10, ballColor: WHITE)
