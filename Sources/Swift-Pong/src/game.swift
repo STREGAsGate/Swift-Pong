@@ -3,7 +3,7 @@ import CRaylib
 import Raylib
 
 private enum GameState {
-  case IDLE, START, GAME_OVER
+  case IDLE, START
 }
 
 private var state = GameState.IDLE
@@ -39,7 +39,8 @@ struct Game {
             DrawText("Score: \(String(score))", 600, 100, 24, RAYWHITE)
         }
         if aiScored && state == .IDLE {
-            DrawText("Highest Score: \(String(previousScore))", 550, 150, 24, RAYWHITE)
+            DrawText("Highest Score: \(String(previousScore))", 530, 120, 30, RAYWHITE)
+            DrawText("You lose!", 580, 80, 30, RAYWHITE)
         }
         EndDrawing()
     }
@@ -62,7 +63,7 @@ struct Game {
     private static func ResetScore() {
         previousScore = score
         score = 0
-        print(previousScore)
+        aiScored = true
     }
 
     /// Function taking over the responsibility of updating the game loop
@@ -109,11 +110,8 @@ struct Game {
             
             if ball.hasCollided(with: player) || ball.hasCollided(with: AI) {
                 ball.velocity.x *= -1.05
+                score += 5
                 PlaySound(SoundManager.paddleHit)
-
-                if ball.hasCollided(with: player) {
-                    score += 5
-                }
             }
 
             if ball.position.x < 50 && AI.position.x == 0 || ball.position.x > 90 && AI.position.x > 40 {
@@ -129,11 +127,7 @@ struct Game {
             } else if ball.position.x <= 0 - 4 {
                 Reset()
                 ResetScore()
-                aiScored = true
             }
-
-        case .GAME_OVER:
-            print("Game Over")
         }
     }
 }
@@ -145,6 +139,7 @@ func CreateBlinkingText(text: String, posX: Int32, posY: Int32, fontSize: Int32,
             }
 }
 
+/// Clamping value to min and max
 func Clamp(value: Float, min: Float, max: Float) -> Float {
     if value < min {
         return min
