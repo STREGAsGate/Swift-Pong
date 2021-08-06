@@ -15,7 +15,7 @@ private var aiScored = false
 struct GameConfig {
     static let WINDOW_WIDTH: Int32 = 1280
     static let WINDOW_HEIGHT: Int32 = 720
-    static let WINDOW_TITLE: String = "Swift-Pong"
+    static let WINDOW_TITLE: String = "Pong Survival"
     static let TARGET_FPS: Int32 = 60
 
     /// Holds all Raylib related config flags.
@@ -31,7 +31,6 @@ struct Game {
     static func Draw() {
         BeginDrawing()
         ClearBackground(OLIVEDAB)
-        DrawFPS(10,10)
         player.Draw()
         AI.Draw()
         ball.Draw()
