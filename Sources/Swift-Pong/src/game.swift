@@ -45,7 +45,7 @@ struct Game {
     }
 
     /// Reset paddles, ball and game state after score
-    static func Reset() {
+    private static func Reset() {
         state = .IDLE
         ball.position.x = Float(GameConfig.WINDOW_WIDTH/2)
         ball.position.y = Float(GameConfig.WINDOW_HEIGHT/2)
@@ -58,30 +58,18 @@ struct Game {
         AI.position.y =  320
     }
 
-    static func ResetScore() {
+    /// When AI scores, reset players score and set previousScore to score to let player know their highest score
+    private static func ResetScore() {
         previousScore = score
         score = 0
         print(previousScore)
     }
 
-    static func Clamp(value: Float, min: Float, max: Float) -> Float {
-        if value < min {
-            return min
-        } else if value < max {
-            return value
-        } else {
-            return max
-        }
-    }
-
     /// Function taking over the responsibility of updating the game loop
-    static func Update(dt: Float) {
+    static func Update(dt: Float = GetFrameTime()) {
         switch state {
         case .IDLE:
-        let startTextBlinking = floor(GetTime().truncatingRemainder(dividingBy: 2))
-            if startTextBlinking == 0 {
-                DrawText("PRESS SPACE TO SERVE", 500, 200, 24, Color(r: 245, g: 245, b: 245, a: 245))
-            }
+            CreateBlinkingText(text: "PRESS SPACE TO SERVE", posX: 500, posY: 200, fontSize: 24, color: RAYWHITE)
             if IsKeyPressed(Int32(KEY_SPACE.rawValue)) {
                 state = .START
             }
@@ -109,7 +97,7 @@ struct Game {
             ball.position.x -= ball.velocity.x * dt
             ball.position.y -= ball.velocity.y * dt
 
-            if ball.position.y < 5 || ball.position.y >= Float(GameConfig.WINDOW_HEIGHT) + -7 {
+            if ball.position.y < 5 || ball.position.y >= Float(GameConfig.WINDOW_HEIGHT){
                 ball.velocity.y *= -1
             }
 
@@ -118,9 +106,7 @@ struct Game {
                 player.velocity.y = 600
                 ball.velocity.x = Clamp(value: ball.velocity.x, min: 400, max: 2000)
             }
-
-            print(ball.velocity.x)
-
+            
             if ball.hasCollided(with: player) || ball.hasCollided(with: AI) {
                 ball.velocity.x *= -1.05
                 PlaySound(SoundManager.paddleHit)
@@ -152,3 +138,19 @@ struct Game {
     }
 }
 
+func CreateBlinkingText(text: String, posX: Int32, posY: Int32, fontSize: Int32, color: Color) {
+    let floorTime = floor(GetTime().truncatingRemainder(dividingBy: 2))
+    if floorTime == 0 {
+                DrawText(text, posX, posY, fontSize, color)
+            }
+}
+
+func Clamp(value: Float, min: Float, max: Float) -> Float {
+    if value < min {
+        return min
+    } else if value < max {
+        return value
+    } else {
+        return max
+    }
+}

@@ -9,10 +9,9 @@ InitAudioDevice()
 PlayMusicStream(SoundManager.backgroundMusic)
 
 while !WindowShouldClose() {
-    let DT = GetFrameTime()
     Game.Draw()
+    Game.Update()
     SoundManager.UpdateMusic()
-    Game.Update(dt: DT)
 }
 SoundManager.UnloadMusic()
 CloseWindow()

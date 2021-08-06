@@ -3,6 +3,9 @@ import PackageDescription
 
 let package = Package(
     name: "Swift-Pong",
+    platforms: [
+        .macOS(.v11)
+    ],
     products: [
         .executable(name: "Swift-Pong", targets: ["Swift-Pong"])
     ],
