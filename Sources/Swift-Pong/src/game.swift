@@ -2,11 +2,14 @@ import Foundation
 import CRaylib
 import Raylib
 
-enum GameState {
+private enum GameState {
   case IDLE, START, GAME_OVER
 }
 
-var state = GameState.IDLE
+private var state = GameState.IDLE
+private var score = 0
+private var previousScore = 0
+private var aiScored = false
 
 /// All constants and system configurations.
 struct GameConfig {
@@ -32,9 +35,16 @@ struct Game {
         player.Draw()
         AI.Draw()
         ball.Draw()
+        if state == .START {
+            DrawText("Score: \(String(score))", 600, 100, 24, RAYWHITE)
+        }
+        if aiScored && state == .IDLE {
+            DrawText("Highest Score: \(String(previousScore))", 550, 150, 24, RAYWHITE)
+        }
         EndDrawing()
     }
 
+    /// Reset paddles, ball and game state after score
     static func Reset() {
         state = .IDLE
         ball.position.x = Float(GameConfig.WINDOW_WIDTH/2)
@@ -48,14 +58,34 @@ struct Game {
         AI.position.y =  320
     }
 
+    static func ResetScore() {
+        previousScore = score
+        score = 0
+        print(previousScore)
+    }
+
+    static func Clamp(value: Float, min: Float, max: Float) -> Float {
+        if value < min {
+            return min
+        } else if value < max {
+            return value
+        } else {
+            return max
+        }
+    }
+
     /// Function taking over the responsibility of updating the game loop
     static func Update(dt: Float) {
         switch state {
         case .IDLE:
-            DrawText("PRESS SPACE TO SERVE", 500, 200, 24, WHITE)
+        let startTextBlinking = floor(GetTime().truncatingRemainder(dividingBy: 2))
+            if startTextBlinking == 0 {
+                DrawText("PRESS SPACE TO SERVE", 500, 200, 24, Color(r: 245, g: 245, b: 245, a: 245))
+            }
             if IsKeyPressed(Int32(KEY_SPACE.rawValue)) {
                 state = .START
             }
+
         case .START:
             if IsKeyDown(Int32(KEY_W.rawValue)) {
                 player.position.y -= player.velocity.y * dt
@@ -83,13 +113,21 @@ struct Game {
                 ball.velocity.y *= -1
             }
 
+
             if ball.velocity.x >= 700 {
                 player.velocity.y = 600
+                ball.velocity.x = Clamp(value: ball.velocity.x, min: 400, max: 2000)
             }
+
+            print(ball.velocity.x)
 
             if ball.hasCollided(with: player) || ball.hasCollided(with: AI) {
                 ball.velocity.x *= -1.05
                 PlaySound(SoundManager.paddleHit)
+
+                if ball.hasCollided(with: player) {
+                    score += 5
+                }
             }
 
             if ball.position.x < 50 && AI.position.x == 0 || ball.position.x > 90 && AI.position.x > 40 {
@@ -100,8 +138,12 @@ struct Game {
                 }
             }
 
-            if ball.position.x >= Float(GameConfig.WINDOW_WIDTH) + 4 || ball.position.x <= 0 - 4{
+            if ball.position.x >= Float(GameConfig.WINDOW_WIDTH) + 4 {
                 Reset()
+            } else if ball.position.x <= 0 - 4 {
+                Reset()
+                ResetScore()
+                aiScored = true
             }
 
         case .GAME_OVER:

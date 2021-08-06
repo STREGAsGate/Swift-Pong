@@ -20,6 +20,7 @@ struct Paddle {
     mutating func Draw() {
         DrawRectangleRec(position, paddleColor)
     }
+
 }
 
 struct Ball {
