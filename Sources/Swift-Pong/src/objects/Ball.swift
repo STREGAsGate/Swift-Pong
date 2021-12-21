@@ -1,7 +1,7 @@
 import Raylib
 
 // Ball object
-struct ball {
+struct Ball {
 
     // Object initialisation
     var ballPosition: Vector2
@@ -18,7 +18,7 @@ struct ball {
     }
 
     // Collision detection function against paddle objects
-    func hasCollided(with paddle: paddle) -> Bool {
+    func hasCollided(with paddle: Paddle) -> Bool {
         if self.ballPosition.x > paddle.paddlePosition.x + paddle.paddleSize.x + 5 || paddle.paddlePosition.x > self.ballPosition.x + self.ballSize.x + 5{
             return false
         }
@@ -32,7 +32,7 @@ struct ball {
 }
 
 // Balls own update function
-extension ball {
+extension Ball {
     mutating func update() {
         if randomServeChoice == 0 {
             self.ballPosition.x -= self.ballSpeed.x * Raylib.getFrameTime()
@@ -46,7 +46,7 @@ extension ball {
 }
 
 // Balls own draw function
-extension ball {
+extension Ball {
     func draw() {
         Raylib.drawRectangleV(self.ballPosition, self.ballSize, self.ballColor)
     }

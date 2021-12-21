@@ -1,3 +1,3 @@
 
-var game = engine.game
+var game = Engine.shared
 game.run()

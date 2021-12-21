@@ -2,7 +2,7 @@ import Raylib
 import Foundation
 
 // Sound Manager holds all paths to sound effects of the game and loads them up only when needed (lazy)
-struct soundManager {
+struct SoundManager {
 
     // Get path from resource bundle
     private (set) lazy var paddleHitPath = Bundle.module.url(forResource: "paddleHit", withExtension: "wav")
@@ -15,12 +15,12 @@ struct soundManager {
     private (set) lazy var wallHitSFX = Raylib.loadSound(wallHitPath!.path)
 
     // Sound Manager singleton --> Outgoing
-    static let shared = soundManager()
+    static let shared = SoundManager()
     private init() { }
 }
 
 // Helper functions
-extension soundManager {
+extension SoundManager {
     // Set volume of SFX
     func setSoundVolume(soundName: Sound, soundVolume: Float) {
         Raylib.setSoundVolume(soundName, soundVolume)

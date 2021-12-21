@@ -1,25 +1,25 @@
 import Raylib
 import Foundation
 
-struct gameLogic {
+struct GameLogic {
     // Game states
-    private enum gameState {
+    private enum GameState {
         case IDLE, START, SCORED, LOST
     }
 
     // Game logic variables
-    private var state = gameState.IDLE
+    private var state = GameState.IDLE
     var score: Int = 0
     var previousScore: Int = 0
     var aiScored: Bool = false
     
     //Sound manager singleton <-- Receiving
-    var sfxManager = soundManager.shared
+    var sfxManager = SoundManager.shared
 
     // Game objects Initialisation
-    private var playerPaddle = paddle(paddlePosition: Vector2(x: 10, y: 320), paddleSize: Vector2(x: 10, y: 100), paddleSpeed: 550, paddleColor: .white, isAI: false)
-    private var servingBall = ball(ballPosition: Vector2(x: Float(1280/2), y: Float(720/2)), ballSize: Vector2(x: 10, y: 10), ballSpeed: Vector2(x: 420, y: 420), ballColor: .white)
-    private var aiPaddle = paddle(paddlePosition: Vector2(x: 1260, y: 320), paddleSize: Vector2(x: 10, y: 100), paddleSpeed: 420, paddleColor: .white, isAI: true)
+    private var playerPaddle = Paddle(paddlePosition: Vector2(x: 10, y: 320), paddleSize: Vector2(x: 10, y: 100), paddleSpeed: 550, paddleColor: .white, isAI: false)
+    private var servingBall = Ball(ballPosition: Vector2(x: Float(1280/2), y: Float(720/2)), ballSize: Vector2(x: 10, y: 10), ballSpeed: Vector2(x: 420, y: 420), ballColor: .white)
+    private var aiPaddle = Paddle(paddlePosition: Vector2(x: 1260, y: 320), paddleSize: Vector2(x: 10, y: 100), paddleSpeed: 420, paddleColor: .white, isAI: true)
     
     // Function that resets the whole game after losing/winning
     mutating func gameReset() {
@@ -61,7 +61,7 @@ struct gameLogic {
     }
 }
 
-extension gameLogic {
+extension GameLogic {
     mutating func update() {
         switch state {
             case .IDLE:
@@ -143,7 +143,7 @@ extension gameLogic {
 }
 
 // Main game logic draw function, calling all draw functions from other objects all very self explanatory
-extension gameLogic {
+extension GameLogic {
     func draw() {
         playerPaddle.draw()
         aiPaddle.draw()

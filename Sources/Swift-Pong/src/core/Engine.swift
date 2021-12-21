@@ -1,13 +1,13 @@
 import Raylib
 import Foundation
 
-struct engine {
+class Engine {
     // Engine singleton --> Outgoing
-    static let game = engine()
+    static let shared = Engine()
     private init() { }
 
     // Game logic <-- Receiving
-    var logic = gameLogic()
+    var logic = GameLogic()
 
     // Window Defines
     let windowWidth: Int32 = 1280
@@ -15,7 +15,7 @@ struct engine {
     let targetFPS:Int32 = 60
 
     // Run function that starts the game
-    mutating func run() {
+    func run() {
         // Initialisation
         Raylib.initWindow(windowWidth, windowHeight, "Pong Survival")
         Raylib.initAudioDevice()
@@ -29,17 +29,21 @@ struct engine {
         // Deinit and close the window and audio stream
         logic.sfxManager.closeAudio()
         Raylib.closeWindow()
+
     }
+    deinit {
+            
+        }
 }
 
 // Main engine update function which calls logic update
-extension engine {
-    private mutating func update() {
+extension Engine {
+    private func update() {
         logic.update()
     }
 }
 // Main engine draw function which calls logics draw function that holds all of objects draw function
-extension engine {
+extension Engine {
     private func draw() {
         Raylib.beginDrawing()
         Raylib.clearBackground(.darkGreen)
