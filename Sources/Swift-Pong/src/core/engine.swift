@@ -23,8 +23,8 @@ struct engine {
 
         // Main game loop
         while !Raylib.windowShouldClose {
-            update()
-            draw()
+            self.update()
+            self.draw()
         }
         // Deinit and close the window and audio stream
         logic.sfxManager.closeAudio()
