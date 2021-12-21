@@ -5,14 +5,14 @@ import Foundation
 struct soundManager {
 
     // Get path from resource bundle
-    lazy var paddleHitPath = Bundle.module.url(forResource: "paddleHit", withExtension: "wav")
-    lazy var scorePath = Bundle.module.url(forResource: "score", withExtension: "wav")
-    lazy var wallHitPath = Bundle.module.url(forResource: "wallHit", withExtension: "wav")
+    private (set) lazy var paddleHitPath = Bundle.module.url(forResource: "paddleHit", withExtension: "wav")
+    private (set) lazy var scorePath = Bundle.module.url(forResource: "score", withExtension: "wav")
+    private (set) lazy var wallHitPath = Bundle.module.url(forResource: "wallHit", withExtension: "wav")
 
     // Load all SFX
-    lazy var paddleHitSFX = Raylib.loadSound(paddleHitPath!.path)
-    lazy var scoreSFX = Raylib.loadSound(scorePath!.path)
-    lazy var wallHitSFX = Raylib.loadSound(wallHitPath!.path)
+    private (set) lazy var paddleHitSFX = Raylib.loadSound(paddleHitPath!.path)
+    private (set) lazy var scoreSFX = Raylib.loadSound(scorePath!.path)
+    private (set) lazy var wallHitSFX = Raylib.loadSound(wallHitPath!.path)
 
     // Sound Manager singleton --> Outgoing
     static let shared = soundManager()
