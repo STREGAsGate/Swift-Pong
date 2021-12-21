@@ -3,10 +3,10 @@
     "pins": [
       {
         "package": "Raylib",
-        "repositoryURL": "https://github.com/conifer-dev/raylib-swift",
+        "repositoryURL": "https://github.com/STREGAsGate/Raylib.git",
         "state": {
           "branch": "master",
-          "revision": "01d3be42348327bf336e79ca7185005ededee9c5",
+          "revision": "79248b76558ab91d564f2d76795be7a56e2c85b2",
           "version": null
         }
       }
