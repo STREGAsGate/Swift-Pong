@@ -13,7 +13,7 @@ struct gameLogic {
     var previousScore: Int = 0
     var aiScored: Bool = false
     
-    //Sound manager singleton --> Receiving
+    //Sound manager singleton <-- Receiving
     var sfxManager = soundManager.shared
 
     // Game objects Initialisation

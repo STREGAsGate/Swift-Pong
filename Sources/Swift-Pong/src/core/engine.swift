@@ -6,7 +6,7 @@ struct engine {
     static let game = engine()
     private init() { }
 
-    // Game logic --> Receiving
+    // Game logic <-- Receiving
     var logic = gameLogic()
 
     // Window Defines
