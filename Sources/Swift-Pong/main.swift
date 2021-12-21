@@ -1,3 +1,2 @@
-
-var game = Engine.shared
+let game = Engine()
 game.run()

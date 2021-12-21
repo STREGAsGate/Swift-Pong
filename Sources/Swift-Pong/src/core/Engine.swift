@@ -2,9 +2,6 @@ import Raylib
 import Foundation
 
 class Engine {
-    // Engine singleton --> Outgoing
-    static let shared = Engine()
-    private init() { }
 
     // Game logic <-- Receiving
     var logic = GameLogic()
