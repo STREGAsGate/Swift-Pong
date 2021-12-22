@@ -1,7 +1,7 @@
 import Raylib
 import Foundation
 
-class Engine {
+final class Engine {
 
     // Game logic <-- Receiving
     var logic = GameLogic()
