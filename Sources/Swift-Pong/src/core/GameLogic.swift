@@ -62,7 +62,7 @@ struct GameLogic {
 }
 
 extension GameLogic {
-    mutating func update() {
+    mutating func update(dt: Float = Raylib.getFrameTime()) {
         switch state {
             case .IDLE:
                 createBlinkingText(text: "PRESS SPACE TO SERVE", positionX: 500, positionY: 200, fontSize: 24, color: .rayWhite)
@@ -71,9 +71,9 @@ extension GameLogic {
                 }
             
             case .START:
-                playerPaddle.update()
-                aiPaddle.update()
-                servingBall.update()
+                playerPaddle.update(dt)
+                aiPaddle.update(dt)
+                servingBall.update(dt)
 
                 // Set previous score to current score so that highscore can be shown when player loses or wins
                 previousScore = score
@@ -99,9 +99,9 @@ extension GameLogic {
                 // Very basic AI movement
                 if servingBall.ballPosition.x < 50 && aiPaddle.paddlePosition.x == 0 || servingBall.ballPosition.x > 90 && aiPaddle.paddlePosition.x > 90 {
                     if servingBall.ballPosition.y > aiPaddle.paddlePosition.y + (aiPaddle.paddleSize.y / 2) {
-                        aiPaddle.paddlePosition.y += Raylib.getFrameTime() * aiPaddle.paddleSpeed
+                        aiPaddle.paddlePosition.y += dt * aiPaddle.paddleSpeed
                     } else if servingBall.ballPosition.y < aiPaddle.paddlePosition.y + (aiPaddle.paddleSize.y / 2) && aiPaddle.paddlePosition.y > 0 {
-                        aiPaddle.paddlePosition.y -= Raylib.getFrameTime() * aiPaddle.paddleSpeed
+                        aiPaddle.paddlePosition.y -= dt * aiPaddle.paddleSpeed
                     }
                 }
 

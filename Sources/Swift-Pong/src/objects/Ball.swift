@@ -33,13 +33,13 @@ struct Ball {
 
 // Balls own update function
 extension Ball {
-    mutating func update() {
+    mutating func update(_ dt: Float) {
         if randomServeChoice == 0 {
-            self.ballPosition.x -= self.ballSpeed.x * Raylib.getFrameTime()
-            self.ballPosition.y -= self.ballSpeed.y * Raylib.getFrameTime()
+            self.ballPosition.x -= self.ballSpeed.x * dt
+            self.ballPosition.y -= self.ballSpeed.y * dt
         } else {
-            self.ballPosition.x += self.ballSpeed.x * Raylib.getFrameTime()
-            self.ballPosition.y += self.ballSpeed.y * Raylib.getFrameTime()
+            self.ballPosition.x += self.ballSpeed.x * dt
+            self.ballPosition.y += self.ballSpeed.y * dt
         }
 
     }

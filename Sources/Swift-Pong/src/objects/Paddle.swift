@@ -20,12 +20,12 @@ extension Paddle {
 
 // Paddles own update function which also check if each paddle is AI, if not it's controllable
 extension Paddle {
-    mutating func update() {
+    mutating func update(_ dt: Float) {
         if Raylib.isKeyDown(.letterW) && !isAI {
-            self.paddlePosition.y -= Raylib.getFrameTime() * self.paddleSpeed
+            self.paddlePosition.y -= dt * self.paddleSpeed
         }
         if Raylib.isKeyDown(.letterS) && !isAI {
-            self.paddlePosition.y += Raylib.getFrameTime() * self.paddleSpeed
+            self.paddlePosition.y += dt * self.paddleSpeed
         }
 
         if self.paddlePosition.y < 0 {
