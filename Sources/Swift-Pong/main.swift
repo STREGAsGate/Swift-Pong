@@ -1,2 +1,3 @@
-let game = Engine()
+
+var game = Engine.game
 game.run()

@@ -19,11 +19,11 @@ struct Ball {
 
     // Collision detection function against paddle objects
     func hasCollided(with paddle: Paddle) -> Bool {
-        if self.ballPosition.x > paddle.paddlePosition.x + paddle.paddleSize.x + 5 || paddle.paddlePosition.x > self.ballPosition.x + self.ballSize.x + 5{
+        if self.ballPosition.x > paddle.paddlePosition.x + paddle.paddleSize.x + 5 || paddle.paddlePosition.x > self.ballPosition.x + self.ballSize.x + 5 {
             return false
         }
 
-        if self.ballPosition.y > paddle.paddlePosition.y + paddle.paddleSize.y + 5 || paddle.paddlePosition.y > self.ballPosition.y + self.ballSize.y + 5{
+        if self.ballPosition.y > paddle.paddlePosition.y + paddle.paddleSize.y + 5 || paddle.paddlePosition.y > self.ballPosition.y + self.ballSize.y + 5 {
             return false
         }
 
@@ -33,20 +33,21 @@ struct Ball {
 
 // Balls own update function
 extension Ball {
-    mutating func update(_ dt: Float) {
+    @inlinable
+    mutating func update() {
         if randomServeChoice == 0 {
-            self.ballPosition.x -= self.ballSpeed.x * dt
-            self.ballPosition.y -= self.ballSpeed.y * dt
-        } else {
-            self.ballPosition.x += self.ballSpeed.x * dt
-            self.ballPosition.y += self.ballSpeed.y * dt
+            self.ballPosition.x -= self.ballSpeed.x * Raylib.getFrameTime()
+            self.ballPosition.y -= self.ballSpeed.y * Raylib.getFrameTime()
+        }else{
+            self.ballPosition.x += self.ballSpeed.x * Raylib.getFrameTime()
+            self.ballPosition.y += self.ballSpeed.y * Raylib.getFrameTime()
         }
-
     }
 }
 
 // Balls own draw function
 extension Ball {
+    @inlinable
     func draw() {
         Raylib.drawRectangleV(self.ballPosition, self.ballSize, self.ballColor)
     }

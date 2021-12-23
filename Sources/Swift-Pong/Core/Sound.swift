@@ -2,21 +2,20 @@ import Raylib
 import Foundation
 
 // Sound Manager holds all paths to sound effects of the game and loads them up only when needed (lazy)
-struct SoundManager {
+class SoundManager {
 
     // Get path from resource bundle
-    private (set) lazy var paddleHitPath = Bundle.module.url(forResource: "paddleHit", withExtension: "wav")
-    private (set) lazy var scorePath = Bundle.module.url(forResource: "score", withExtension: "wav")
-    private (set) lazy var wallHitPath = Bundle.module.url(forResource: "wallHit", withExtension: "wav")
+    let paddleHitPath = Bundle.module.url(forResource: "paddleHit", withExtension: "wav")
+    let scorePath = Bundle.module.url(forResource: "score", withExtension: "wav")
+    let wallHitPath = Bundle.module.url(forResource: "wallHit", withExtension: "wav")
 
     // Load all SFX
-    private (set) lazy var paddleHitSFX = Raylib.loadSound(paddleHitPath!.path)
-    private (set) lazy var scoreSFX = Raylib.loadSound(scorePath!.path)
-    private (set) lazy var wallHitSFX = Raylib.loadSound(wallHitPath!.path)
+    lazy private(set) var paddleHitSFX = Raylib.loadSound(paddleHitPath!.path)
+    lazy private(set) var scoreSFX = Raylib.loadSound(scorePath!.path)
+    lazy private(set) var wallHitSFX = Raylib.loadSound(wallHitPath!.path)
 
     // Sound Manager singleton --> Outgoing
-    static let shared = SoundManager()
-    private init() { }
+    init() { }
 }
 
 // Helper functions
@@ -27,7 +26,7 @@ extension SoundManager {
     }
 
     // Unload all audio from RAM and close audio device
-    mutating func closeAudio() {
+    func closeAudio() {
         self.unloadAudio(soundName: paddleHitSFX)
         self.unloadAudio(soundName: scoreSFX)
         self.unloadAudio(soundName: wallHitSFX)

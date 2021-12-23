@@ -1,10 +1,13 @@
 import Raylib
 import Foundation
 
-final class Engine {
+class Engine {
+    // Engine singleton --> Outgoing
+    static let game = Engine()
+    private init() { }
 
     // Game logic <-- Receiving
-    var logic = GameLogic()
+    let logic = GameLogic()
 
     // Window Defines
     let windowWidth: Int32 = 1280
@@ -26,11 +29,7 @@ final class Engine {
         // Deinit and close the window and audio stream
         logic.sfxManager.closeAudio()
         Raylib.closeWindow()
-
     }
-    deinit {
-            
-        }
 }
 
 // Main engine update function which calls logic update

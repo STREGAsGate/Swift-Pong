@@ -1,20 +1,20 @@
 import Raylib
 import Foundation
 
-struct GameLogic {
+class GameLogic {
     // Game states
     private enum GameState {
-        case IDLE, START, SCORED, LOST
+        case idle, start, scored, lost
     }
 
     // Game logic variables
-    private var state = GameState.IDLE
+    private var state: GameState = .idle
     var score: Int = 0
     var previousScore: Int = 0
-    var aiScored: Bool = false
+    var aiDidScore: Bool = false
     
     //Sound manager singleton <-- Receiving
-    var sfxManager = SoundManager.shared
+    let sfxManager: SoundManager = SoundManager()
 
     // Game objects Initialisation
     private var playerPaddle = Paddle(paddlePosition: Vector2(x: 10, y: 320), paddleSize: Vector2(x: 10, y: 100), paddleSpeed: 550, paddleColor: .white, isAI: false)
@@ -22,9 +22,8 @@ struct GameLogic {
     private var aiPaddle = Paddle(paddlePosition: Vector2(x: 1260, y: 320), paddleSize: Vector2(x: 10, y: 100), paddleSpeed: 420, paddleColor: .white, isAI: true)
     
     // Function that resets the whole game after losing/winning
-    mutating func gameReset() {
-        state = .IDLE
-        servingBall.resetRandomness()
+    func gameReset() {
+        state = .idle
         servingBall.ballPosition.x = Float(1280/2)
         servingBall.ballPosition.y = Float(720/2)
         servingBall.ballSpeed.x = 420
@@ -37,7 +36,7 @@ struct GameLogic {
     }
 
     // Resets players score to 0
-    mutating func resetScore() {
+    func resetScore() {
         score = 0 
     }
 
@@ -62,18 +61,18 @@ struct GameLogic {
 }
 
 extension GameLogic {
-    mutating func update(dt: Float = Raylib.getFrameTime()) {
+    func update() {
         switch state {
-            case .IDLE:
+            case .idle:
                 createBlinkingText(text: "PRESS SPACE TO SERVE", positionX: 500, positionY: 200, fontSize: 24, color: .rayWhite)
                 if Raylib.isKeyPressed(.space) {
-                    state = .START
+                    state = .start
                 }
             
-            case .START:
-                playerPaddle.update(dt)
-                aiPaddle.update(dt)
-                servingBall.update(dt)
+            case .start:
+                playerPaddle.update()
+                aiPaddle.update()
+                servingBall.update()
 
                 // Set previous score to current score so that highscore can be shown when player loses or wins
                 previousScore = score
@@ -99,9 +98,9 @@ extension GameLogic {
                 // Very basic AI movement
                 if servingBall.ballPosition.x < 50 && aiPaddle.paddlePosition.x == 0 || servingBall.ballPosition.x > 90 && aiPaddle.paddlePosition.x > 90 {
                     if servingBall.ballPosition.y > aiPaddle.paddlePosition.y + (aiPaddle.paddleSize.y / 2) {
-                        aiPaddle.paddlePosition.y += dt * aiPaddle.paddleSpeed
+                        aiPaddle.paddlePosition.y += Raylib.getFrameTime() * aiPaddle.paddleSpeed
                     } else if servingBall.ballPosition.y < aiPaddle.paddlePosition.y + (aiPaddle.paddleSize.y / 2) && aiPaddle.paddlePosition.y > 0 {
-                        aiPaddle.paddlePosition.y -= dt * aiPaddle.paddleSpeed
+                        aiPaddle.paddlePosition.y -= Raylib.getFrameTime() * aiPaddle.paddleSpeed
                     }
                 }
 
@@ -114,17 +113,17 @@ extension GameLogic {
                 // Player scored --> Holy shit the game can actually be won... Send player to .SCORED game state after playing score SFX
                 if servingBall.ballPosition.x >= Float(Raylib.getScreenWidth()) {
                     Raylib.playSound(sfxManager.scoreSFX)
-                    state = .SCORED
+                    state = .scored
                 }
 
                 // Player lost, send player to the .LOST game state after playing score SFX
                 if servingBall.ballPosition.x <= -4 {
                     Raylib.playSound(sfxManager.scoreSFX)
-                    state = .LOST
+                    state = .lost
                 }
 
             // SCORED game state displaying blinking text with instructions
-            case .SCORED:
+            case .scored:
                 createBlinkingText(text: "PRESS SPACE TO RESTART THE GAME", positionX: 410, positionY: 200, fontSize: 24, color: .rayWhite)
                 if Raylib.isKeyPressed(.space) {
                     gameReset()
@@ -132,7 +131,7 @@ extension GameLogic {
                 }
 
             // As above
-            case .LOST:
+            case .lost:
                 createBlinkingText(text: "PRESS SPACE TO RESTART THE GAME", positionX: 410, positionY: 200, fontSize: 24, color: .rayWhite)
                 if Raylib.isKeyPressed(.space) {
                     gameReset()
@@ -148,18 +147,18 @@ extension GameLogic {
         playerPaddle.draw()
         aiPaddle.draw()
         servingBall.draw()
-        if state == .START {
+        
+        switch state {
+        case .start:
             Raylib.drawText("Score: \(String(score))", 600, 100, 24, .rayWhite)
-        }
-
-        if state == .LOST {
+        case .lost:
             Raylib.drawText("Highest Score: \(String(previousScore))", 530, 120, 30, .rayWhite)
             Raylib.drawText("You lose!", 580, 80, 30, .rayWhite)
-        }
-
-        if state == .SCORED {
+        case .scored:
             Raylib.drawText("Congratulations You actually won the impossible game!", 300, 80, 27, .rayWhite)
             Raylib.drawText("Your score: \(String(score))", 565, 120, 24, .rayWhite)
+        case .idle:
+            break
         }
     }
 }
